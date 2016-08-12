@@ -1,7 +1,8 @@
 #ifndef _GARBAGE_COLLECTED_H_
 #define _GARBAGE_COLLECTED_H_
 
-#include <set>
+#include <algorithm>
+#include <unordered_set>
 
 namespace ploy
 {
@@ -9,7 +10,7 @@ namespace ploy
 class GarbageCollected
 {
 private:
-  std::set<GarbageCollected*> all;
+  static std::unordered_set<const GarbageCollected*> all;
 
 public:
   GarbageCollected(void);

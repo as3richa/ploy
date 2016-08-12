@@ -2,24 +2,29 @@
 
 #include <string>
 
+#include "../environment.h"
 #include "../tree.h"
+#include "../exceptions.h"
 
 namespace ploy
 {
 
-std::string Tree::Identifier::inspect(void)
+std::string Tree::Identifier::inspect(void) const
 {
   return this->lexeme;
 }
 
-bool Tree::Identifier::reducibile(void)
+const Tree* Tree::Identifier::reduce(Environment* env) const
 {
-  return true;
-}
-
-TreePointer Tree::Identifier::reduce(void)
-{
-  throw "TODO";
+  auto value = env->find(this->lexeme);
+  if(!value)
+  {
+    throw UndefinedIdentifierError(this->lexeme);
+  }
+  else
+  {
+    return value;
+  }
 }
 
 }

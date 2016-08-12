@@ -2,6 +2,12 @@ CC := clang
 
 SRCDIR := src
 SOURCES := $(shell find $(SRCDIR) -name '*.cpp')
+
+LIBRARY := $(SRCDIR)/library.scm
+LIBRARY_SOURCE := $(LIBRARY:.scm=.cpp)
+LIBRARY_HEADER := $(LIBRARY:.scm=.h)
+SOURCES := $(LIBRARY_SOURCE) $(SOURCES)
+
 OBJECTS := $(addsuffix .o,$(basename $(notdir $(SOURCES))))
 
 GMPDIR := vendor/gmp-6.1.1
@@ -36,8 +42,11 @@ $(GMPLIB):
 %.o: $(SRCDIR)/*/%.cpp
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-clean:
-	rm -rf $(OBJECTS) $(TARGET)
+$(LIBRARY_SOURCE): $(LIBRARY)
+	./rc.sh $(LIBRARY)
 
-clean-all:
-	rm -rf $(OBJECTS) $(TARGET) $(GMPBUILDDIR)
+$(LIBRARY_HEADER): $(LIBRARY)
+	./rc.sh $(LIBRARY)
+
+clean:
+	rm -rf $(OBJECTS) $(TARGET) $(LIBRARY_HEADER) $(LIBRARY_SOURCE)

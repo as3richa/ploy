@@ -5,7 +5,7 @@
 namespace ploy
 {
 
-std::string Tree::Or::inspect(void)
+std::string Tree::Or::inspect(void) const
 {
   std::string result = "(or";
   for(auto& param : this->params)
@@ -17,23 +17,28 @@ std::string Tree::Or::inspect(void)
   return result;
 }
 
-bool Tree::Or::reducibile(void)
+const Tree* Tree::Or::reduce(Environment* env) const
 {
-  for(auto& param : this->params)
-    if(param->reducibile())
-      return true;
+  if(params.size() == 0)
+  {
+    return new Tree::Boolean(false);
+  }
+  else
+  {
+    auto length = (int)params.size();
+    for(int i = 0; i < length - 1; i ++)
+    {
+      auto param = params[i]->reduce(env);
+      auto casted = dynamic_cast<const Tree::Boolean*>(param);
 
-  return false;
-}
+      if(!casted || casted->value == true)
+      {
+        return param;
+      }
+    }
 
-TreePointer Tree::Or::reduce(void)
-{
-  throw "TODO";
-}
-
-std::string Tree::Or::description(void)
-{
-  return std::string("Or expression");
+    return params[length - 1]->reduce(env);
+  }
 }
 
 }

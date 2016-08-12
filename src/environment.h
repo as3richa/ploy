@@ -1,6 +1,7 @@
 #ifndef _ENVIRONMENT_H_
 #define _ENVIRONMENT_H_
 
+#include <cassert>
 #include <string>
 
 #include "garbage_collected.h"
@@ -13,13 +14,18 @@ class Environment: public GarbageCollected
 {
 private:
   std::string key;
-  Tree* value;
+  const Tree* value;
   Environment* rest;
 
 public:
   Environment(void) : key(""), value(nullptr) { ; };
-  Environment(std::string key_, Tree* value_, Environment* rest_) : key(key_), value(value_), rest(rest_) { ; };
-  void mutate(std::string key, Tree *value);
+  Environment(std::string key_, const Tree* value_, Environment* rest_) : key(key_), value(value_), rest(rest_)
+  {
+    assert(value && !value->reducibile());
+  };
+
+  void mutate(std::string key, const Tree *value);
+  const Tree* find(std::string key);
 };
 
 }

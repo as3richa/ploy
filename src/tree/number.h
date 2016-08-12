@@ -11,12 +11,14 @@ namespace ploy
 class Tree::Number: public Value
 {
 private:
-  mpq_class value;
+  static mpq_class parse(std::string lexeme);
 
 public:
-  Number(std::string lexeme);
-  virtual std::string inspect(void);
-  virtual std::string description(void);
+  const mpq_class value;
+  Number(std::string lexeme) : value(parse(lexeme)) { ; };
+  Number(mpq_class value_) : value(value_) { ; };
+  virtual std::string inspect(void) const;
+  virtual bool eq(const Tree* other) const;
 };
 
 }

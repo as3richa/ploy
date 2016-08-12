@@ -29,10 +29,12 @@ public:
     LAMBDA,
     AND,
     OR,
-    CONS,
     NUMBER,
     IDENTIFIER,
     BOOLEAN,
+    DEFINE,
+    COND,
+    ELSE,
     N_TYPES
   };
 

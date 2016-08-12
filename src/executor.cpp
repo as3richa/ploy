@@ -4,15 +4,21 @@
 #include <istream>
 #include <memory>
 
+#include "environment.h"
 #include "parser.h"
 #include "tree.h"
+#include "standard_library.h"
 
 namespace ploy
 {
 
-TreePointer execute(std::istream& stream)
+void execute(std::istream& stream)
 {
-  return parse(stream);
+  auto env = standardLibraryEnvironment();
+  for(auto expression : parse(stream))
+  {
+    std::cout << expression->reduce(env);
+  }
 }
 
 }

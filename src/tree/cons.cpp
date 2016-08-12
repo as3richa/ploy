@@ -3,7 +3,7 @@
 namespace ploy
 {
 
-std::string Tree::Cons::inspect(void)
+std::string Tree::Cons::inspect(void) const
 {
   std::string result = "(cons ";
   result += this->first->inspect();
@@ -13,13 +13,14 @@ std::string Tree::Cons::inspect(void)
   return result;
 }
 
-bool Tree::Cons::reducibile(void)
+bool Tree::Cons::reducibile(void) const
 {
   return this->first->reducibile() || this->rest->reducibile();
 }
 
-TreePointer Tree::Cons::reduce(void)
+const Tree* Tree::Cons::reduce(Environment* env) const
 {
+  (void)env;
   throw "TODO";
 }
 

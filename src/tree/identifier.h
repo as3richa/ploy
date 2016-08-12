@@ -13,9 +13,8 @@ private:
 
 public:
   Identifier(std::string lexeme_) : lexeme(lexeme_) { ; }
-  virtual std::string inspect(void);
-  virtual bool reducibile(void);
-  virtual TreePointer reduce(void);
+  virtual std::string inspect(void) const;
+  virtual const Tree* reduce(Environment*) const;
 };
 
 }

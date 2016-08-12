@@ -5,7 +5,7 @@
 namespace ploy
 {
 
-std::string Tree::And::inspect(void)
+std::string Tree::And::inspect(void) const
 {
   std::string result = "(and";
   for(auto& param : this->params)
@@ -17,18 +17,28 @@ std::string Tree::And::inspect(void)
   return result;
 }
 
-bool Tree::And::reducibile(void)
+const Tree* Tree::And::reduce(Environment* env) const
 {
-  for(auto& param : this->params)
-    if(param->reducibile())
-      return true;
+  if(params.size() == 0)
+  {
+    return new Tree::Boolean(true);
+  }
+  else
+  {
+    auto length = (int)params.size();
+    for(int i = 0; i < length - 1; i ++)
+    {
+      auto param = params[i]->reduce(env);
+      auto casted = dynamic_cast<const Tree::Boolean*>(param);
 
-  return false;
-}
+      if(casted && casted->value == false)
+      {
+        return new Tree::Boolean(false);
+      }
+    }
 
-TreePointer Tree::And::reduce(void)
-{
-  throw "TODO";
+    return params[length - 1]->reduce(env);
+  }
 }
 
 }

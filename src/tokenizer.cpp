@@ -27,10 +27,12 @@ const std::map<Token::Type, std::string> descriptions = {
   {Token::LAMBDA, "lambda function"},
   {Token::AND, "and conditional"},
   {Token::OR, "or conditional"},
-  {Token::CONS, "cons pair"},
   {Token::NUMBER, "numeric literal"},
   {Token::IDENTIFIER, "identifier"},
-  {Token::BOOLEAN, "boolean literal"}
+  {Token::BOOLEAN, "boolean literal"},
+  {Token::DEFINE, "definition"},
+  {Token::COND, "cond conditional"},
+  {Token::ELSE, "else identifier"}
 };
 
 const std::map<std::string, Token::Type> keywords = {
@@ -39,7 +41,9 @@ const std::map<std::string, Token::Type> keywords = {
   {"or", Token::OR},
   {"let", Token::LET},
   {"lambda", Token::LAMBDA},
-  {"cons", Token::CONS}
+  {"define", Token::DEFINE},
+  {"cond", Token::COND},
+  {"else", Token::ELSE}
 };
 
 Token::Type transition(Token::Type prev, int c);
@@ -214,7 +218,7 @@ bool isid(int c)
 {
   return
     isalnum(c) ||
-    c == '+' || c == '-' || c == '*' || c == '/' ||
+    c == '+' || c == '-' || c == '*' || c == '/' || c == '?' ||
     c == '%' || c == '!' || c == '<' || c == '>';
 }
 

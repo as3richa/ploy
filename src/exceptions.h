@@ -59,12 +59,6 @@ public:
 
 class RuntimeError: public Error
 {
-public:
-  RuntimeError(std::string what)
-  {
-    strncpy(this->buffer, what.c_str(), sizeof(buffer) - 1);
-    this->buffer[sizeof(this->buffer) - 1] = '\0';
-  }
 };
 
 class RangeError: public Error
@@ -74,6 +68,16 @@ public:
   {
     strncpy(this->buffer, what.c_str(), sizeof(buffer) - 1);
     this->buffer[sizeof(this->buffer) - 1] = '\0';
+  }
+};
+
+class UndefinedIdentifierError: public RuntimeError
+{
+public:
+  UndefinedIdentifierError(std::string identifier)
+  {
+    snprintf(this->buffer, sizeof(this->buffer), "`%s` is undefined; cannot reference an identifier before its definition",
+      identifier.c_str());
   }
 };
 

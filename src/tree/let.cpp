@@ -2,12 +2,13 @@
 
 #include <memory>
 
+#include "../environment.h"
 #include "../tree.h"
 
 namespace ploy
 {
 
-std::string Tree::Let::inspect(void)
+std::string Tree::Let::inspect(void) const
 {
   std::string result = "(let (";
   for(auto& binding : this->bindings)
@@ -26,14 +27,15 @@ std::string Tree::Let::inspect(void)
   return result;
 }
 
-bool Tree::Let::reducibile(void)
+const Tree* Tree::Let::reduce(Environment* env) const
 {
-  return true;
-}
+  auto new_env = env;
+  for(auto& binding : this->bindings)
+  {
+    new_env = new Environment(binding.first, binding.second->reduce(env), new_env);
+  }
 
-TreePointer Tree::Let::reduce(void)
-{
-  throw "TODO";
+  return this->body->reduce(new_env);
 }
 
 }

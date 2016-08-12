@@ -8,7 +8,7 @@
 namespace ploy
 {
 
-Tree::Number::Number(std::string lexeme)
+mpq_class Tree::Number::parse(std::string lexeme)
 {
   size_t point_position = lexeme.find('.');
   size_t e_position = lexeme.find_first_of("eE");
@@ -50,15 +50,17 @@ Tree::Number::Number(std::string lexeme)
     numerator *= multiplier;
   }
 
-  this->value = mpq_class(numerator, denominator);
-  this->value.canonicalize();
+  mpq_class result(numerator, denominator);
+  result.canonicalize();
+
+  return result;
 }
 
-std::string Tree::Number::inspect(void)
+std::string Tree::Number::inspect(void) const
 {
   if(this->value == 0)
   {
-    return 0;
+    return "0";
   }
 
   mpq_class value = this->value;
@@ -88,9 +90,10 @@ std::string Tree::Number::inspect(void)
   return result;
 }
 
-std::string Tree::Number::description(void)
+bool Tree::Number::eq(const Tree* other) const
 {
-  return "number";
+  auto casted = dynamic_cast<const Tree::Number*>(other);
+  return (casted && casted->value == this->value);
 }
 
 }

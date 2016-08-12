@@ -3,7 +3,7 @@
 
 #include "../tree.h"
 
-#include <list>
+#include <vector>
 #include <algorithm>
 
 namespace ploy
@@ -12,16 +12,15 @@ namespace ploy
 class Tree::Let: public Tree
 {
 private:
-  std::list<std::pair<std::string, TreePointer>> bindings;
-  TreePointer body;
+  std::vector<std::pair<std::string, const Tree*>> bindings;
+  const Tree* body;
 
 public:
-  Let(std::list<std::pair<std::string, TreePointer>> bindings_, TreePointer body_) :
+  Let(std::vector<std::pair<std::string, const Tree*>> bindings_, const Tree* body_) :
     bindings(bindings_), body(body_) { ; }
 
-  virtual std::string inspect(void);
-  virtual bool reducibile(void);
-  virtual TreePointer reduce(void);
+  virtual std::string inspect(void) const;
+  virtual const Tree* reduce(Environment*) const;
 };
 
 }

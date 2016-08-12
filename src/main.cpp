@@ -20,7 +20,7 @@ int main(int argc, const char** argv)
     if(argc == 1 || (argc == 2 && strcmp("-", argv[1]) == 0))
     {
       source = "<standard input>";
-      std::cout << ploy::execute(std::cin)->inspect() << '\n';
+      ploy::execute(std::cin);
     }
     else if(argc == 2)
     {
@@ -28,7 +28,7 @@ int main(int argc, const char** argv)
       std::ifstream input;
       input.exceptions(std::ifstream::failbit | std::ifstream::badbit);
       input.open(argv[1]);
-      std::cout << ploy::execute(input)->inspect() << '\n';
+      ploy::execute(input);
     }
     else if(argc == 3 && strcmp("-c", argv[1]) == 0)
     {
@@ -36,7 +36,7 @@ int main(int argc, const char** argv)
       std::istringstream input;
       input.exceptions(std::istringstream::failbit | std::istringstream::badbit);
       input.str(argv[2]);
-      std::cout << ploy::execute(input)->inspect() << '\n';
+      ploy::execute(input);
     }
     else
     {

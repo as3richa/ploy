@@ -2,10 +2,12 @@
 
 #include <string>
 
+#include <cassert>
+
 namespace ploy
 {
 
-std::string Tree::Application::inspect(void)
+std::string Tree::Application::inspect(void) const
 {
   std::string result = "(";
   result += this->fn->inspect();
@@ -18,21 +20,23 @@ std::string Tree::Application::inspect(void)
   return result;
 }
 
-bool Tree::Application::reducibile(void)
+const Tree* Tree::Application::reduce(Environment* env) const
 {
-  if(this->fn->reducibile())
-    return true;
-
-  for(auto& param : this->params)
-    if(param->reducibile())
-      return true;
-
-  return false;
-}
-
-TreePointer Tree::Application::reduce(void)
-{
-  throw "TODO";
+  auto fn = dynamic_cast<const Tree::Callable*>(this->fn->reduce(env));
+  if(!fn)
+  {
+    assert(!"TODO");
+    throw "TODO (not Callable)";
+  }
+  else
+  {
+    std::vector<const Tree*> reduced_params;
+    for(auto& param : this->params)
+    {
+      reduced_params.push_back(param->reduce(env));
+    }
+    return fn->apply(reduced_params);
+  }
 }
 
 }

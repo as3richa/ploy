@@ -11,15 +11,14 @@ namespace ploy
 
 class Tree::Cons: public Tree
 {
-private:
-  TreePointer first;
-  TreePointer rest;
-
 public:
-  Cons(TreePointer first_, TreePointer rest_) : first(first_), rest(rest_) { ; }
-  virtual std::string inspect(void);
-  virtual bool reducibile(void);
-  virtual TreePointer reduce(void);
+  const Tree* const first;
+  const Tree* const rest;
+
+  Cons(const Tree* first_, const Tree* rest_) : first(first_), rest(rest_) { ; }
+  virtual std::string inspect(void) const;
+  virtual bool reducibile(void) const;
+  virtual const Tree* reduce(Environment*) const;
 };
 
 }

@@ -1,0 +1,18 @@
+(define fib (lambda (x y n)
+  (or
+    (and (zero? n) x)
+    (fib y (+ x y) (- n 1)))))
+
+(fib 0 1 0)
+(fib 0 1 1)
+(fib 0 1 2)
+(fib 0 1 3)
+(fib 0 1 4)
+(fib 0 1 5)
+(fib 0 1 6)
+(fib 0 1 7)
+(fib 0 1 8)
+(fib 0 1 9)
+(fib 0 1 10)
+(fib 0 1 1000)
+(fib 0 1 10000)

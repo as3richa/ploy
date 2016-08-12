@@ -10,17 +10,16 @@ namespace ploy
 
 class Tree::Boolean: public Value
 {
-private:
-  bool value;
-
 public:
-  Boolean(std::string lexeme)
+  const bool value;
+
+  Boolean(bool value_) : value(value_) { ; }
+  Boolean(std::string lexeme) : value(lexeme == "#t")
   {
     assert(lexeme == "#t" || lexeme == "#f");
-    value = (lexeme == "#t");
   }
 
-  virtual std::string inspect(void);
+  virtual std::string inspect(void) const;
 };
 
 }

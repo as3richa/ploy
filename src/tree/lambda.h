@@ -1,7 +1,7 @@
 #ifndef _LAMBDA_H_
 #define _LAMBDA_H_
 
-#include <list>
+#include <vector>
 #include <string>
 
 #include "../tree.h"
@@ -9,16 +9,16 @@
 namespace ploy
 {
 
-class Tree::Lambda: public Value
+class Tree::Lambda: public Tree
 {
 private:
-  std::list<std::string> identifiers;
-  TreePointer body;
+  std::vector<std::string> identifiers;
+  const Tree* body;
 
 public:
-  Lambda(std::list<std::string> identifiers_, TreePointer body_) : identifiers(identifiers_), body(body_) { ; }
-  virtual std::string inspect(void);
-  virtual std::string description(void);
+  Lambda(std::vector<std::string> identifiers_, const Tree* body_) : identifiers(identifiers_), body(body_) { ; }
+  virtual std::string inspect(void) const;
+  virtual const Tree* reduce(Environment*) const;
 };
 
 }

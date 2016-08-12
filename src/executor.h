@@ -9,7 +9,7 @@
 namespace ploy
 {
 
-TreePointer execute(std::istream& stream);
+void execute(std::istream& stream);
 
 }
 

@@ -1,9 +1,11 @@
 #include "lambda.h"
 
+#include <vector>
+
 namespace ploy
 {
 
-std::string Tree::Lambda::inspect(void)
+std::string Tree::Lambda::inspect(void) const
 {
   std::string result = "(lambda (";
   for(auto& id : this->identifiers)
@@ -18,9 +20,9 @@ std::string Tree::Lambda::inspect(void)
   return result;
 }
 
-std::string Tree::Lambda::description(void)
+const Tree* Tree::Lambda::reduce(Environment* env) const
 {
-  return "lambda function";
+  return new Tree::Closure(this->identifiers, this->body, env);
 }
 
 }

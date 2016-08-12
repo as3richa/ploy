@@ -9,7 +9,7 @@
 namespace ploy
 {
 
-TreePointer parse(std::istream& input);
+std::vector<const Tree*> parse(std::istream& input);
 
 }
 
