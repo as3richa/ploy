@@ -19,7 +19,7 @@ void Environment::mutate(std::string key, const Tree *value)
 
 const Tree* Environment::find(std::string key)
 {
-  for(auto env = this; env->value; env = env->rest)
+  for(auto env = this; env->value != nullptr; env = env->rest)
   {
     if(env->key == key)
     {
