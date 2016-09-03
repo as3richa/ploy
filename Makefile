@@ -1,26 +1,26 @@
-CC := clang
+CXX := clang
 
 SRCDIR := src
+OBJDIR := obj
+BUILDDIR := build
+
 SOURCES := $(shell find $(SRCDIR) -name '*.cpp')
 
 LIBRARY := $(SRCDIR)/library.scm
-LIBRARY_SOURCE := $(LIBRARY:.scm=.cpp)
-LIBRARY_HEADER := $(LIBRARY:.scm=.h)
-SOURCES := $(LIBRARY_SOURCE) $(SOURCES)
+LIBRARY_SOURCE := $(LIBRARY:$(SRCDIR)/%.scm=$(BUILDDIR)/%.cpp)
+LIBRARY_HEADER := $(LIBRARY_SOURCE:.cpp=.h)
+LIBRARY_OBJECT := $(LIBRARY_SOURCE:$(BUILDDIR)/%.cpp=$(OBJDIR)/%.o)
 
-OBJECTS := $(addsuffix .o,$(basename $(notdir $(SOURCES))))
+OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
+OBJDIRS := $(sort $(dir $(OBJECTS)))
 
-GMPDIR := vendor/gmp-6.1.1
-GMPBUILDDIR := gmp-6.1.1
-GMPLIB := $(GMPBUILDDIR)/libgmp.la
-
-CFLAGS ?= -O3 -Wall -Wextra -Werror -std=c++11 -pedantic -I$(GMPBUILDDIR) -DNDEBUG
-DFLAGS ?= -Wall -Wextra -Werror -std=c++11 -pedantic -I$(GMPBUILDDIR) -g
-LFLAGS ?= -L$(GMPDIR) -lstdc++ -lgmp
+CFLAGS ?= -O3 -Wall -Wextra -Werror -std=c++11 -pedantic -I$(BUILDDIR) -DNDEBUG
+DFLAGS ?= -Wall -Wextra -Werror -std=c++11 -pedantic -I$(BUILDDIR) -g
+LFLAGS ?= -lstdc++ -lgmp
 
 TARGET ?= ploy
 
-.PHONY: all dbg clean clean-all
+.PHONY: all dbg clean
 
 all: $(TARGET)
 
@@ -29,24 +29,23 @@ dbg:
 	$(eval export CFLAGS)
 	$(MAKE)
 
-$(TARGET): $(GMPLIB) $(OBJECTS)
-	$(CC) $(LFLAGS) $(CFLAGS) -o $(TARGET) $(OBJECTS)
+$(TARGET): $(LIBRARY_OBJECT) $(OBJECTS)
+	$(CXX) $(LFLAGS) $(CFLAGS) -o $@ $(LIBRARY_OBJECT) $(OBJECTS)
 
-$(GMPLIB):
-	cp -r $(GMPDIR) $(GMPBUILDDIR)
-	cd $(GMPBUILDDIR) && ./configure && make && make check
+$(LIBRARY_OBJECT): $(LIBRARY_SOURCE) $(OBJDIR)
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
-%.o: $(SRCDIR)/%.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(LIBRARY_SOURCE): $(LIBRARY) $(BUILDDIR)
+	./rc.sh $(LIBRARY) $(BUILDDIR)
 
-%.o: $(SRCDIR)/*/%.cpp
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(OBJDIR)
+	$(CXX) $(CFLAGS) -o $@ -c $<
 
-$(LIBRARY_SOURCE): $(LIBRARY)
-	./rc.sh $(LIBRARY)
+$(OBJDIR):
+	mkdir -p $(OBJDIRS)
 
-$(LIBRARY_HEADER): $(LIBRARY)
-	./rc.sh $(LIBRARY)
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
 
 clean:
-	rm -rf $(OBJECTS) $(TARGET) $(LIBRARY_HEADER) $(LIBRARY_SOURCE)
+	rm -rf $(OBJDIR) $(BUILDDIR) $(TARGET)

@@ -1,9 +1,10 @@
 set -euo pipefail
 
 FILENAME="$1"
-TRIMMED=$(echo $FILENAME | cut -f 1 -d '.')
-HEADER="$TRIMMED.h"
-SOURCE="$TRIMMED.cpp"
+BUILDDIR="$2"
+TRIMMED=$(basename $FILENAME | cut -f 1 -d '.')
+HEADER="$BUILDDIR/$TRIMMED.h"
+SOURCE="$BUILDDIR/$TRIMMED.cpp"
 IDENTIFIER=$(basename $TRIMMED)
 
 cat <<EOF > "$HEADER"

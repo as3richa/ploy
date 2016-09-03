@@ -1,5 +1,4 @@
 *.o
 ploy
-gmp-6.1.1/
-src/library.cpp
-src/library.h
+obj/
+build/
