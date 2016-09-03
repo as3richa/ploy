@@ -8,8 +8,8 @@ BUILDDIR := build
 
 SOURCES := $(shell find $(SRCDIR) -name '*.cpp')
 
-LIBRARY := $(SRCDIR)/library.scm
-LIBRARY_SOURCE := $(LIBRARY:$(SRCDIR)/%.scm=$(BUILDDIR)/%.cpp)
+LIBRARY := $(SRCDIR)/library.ply
+LIBRARY_SOURCE := $(LIBRARY:$(SRCDIR)/%.ply=$(BUILDDIR)/%.cpp)
 LIBRARY_HEADER := $(LIBRARY_SOURCE:.cpp=.h)
 LIBRARY_OBJECT := $(LIBRARY_SOURCE:$(BUILDDIR)/%.cpp=$(OBJDIR)/%.o)
 
