@@ -4,14 +4,14 @@
 #include <string>
 #include <vector>
 
-#include "garbage_collected.h"
+#include "gc.h"
 
 namespace ploy
 {
 
 class Environment;
 
-class Tree: public GarbageCollected
+class Tree: public GC
 {
 public:
   class Value;

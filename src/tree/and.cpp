@@ -21,7 +21,7 @@ const Tree* Tree::And::reduce(Environment* env) const
 {
   if(params.size() == 0)
   {
-    return new Tree::Boolean(true);
+    return Tree::Boolean::fromValue(true);
   }
   else
   {
@@ -33,7 +33,7 @@ const Tree* Tree::And::reduce(Environment* env) const
 
       if(casted && casted->value == false)
       {
-        return new Tree::Boolean(false);
+        return Tree::Boolean::fromValue(false);
       }
     }
 

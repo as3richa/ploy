@@ -2,11 +2,12 @@
 #define _STANDARD_LIBRARY_H_
 
 #include "environment.h"
+#include "tree.h"
 
 namespace ploy
 {
 
-Environment* standardLibraryEnvironment(void);
+Environment* standardLibrary(void);
 
 }
 

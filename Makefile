@@ -1,3 +1,5 @@
+MAKEFLAGS += -r
+
 CXX := clang
 
 SRCDIR := src
@@ -20,7 +22,7 @@ LFLAGS ?= -lstdc++ -lgmp
 
 TARGET ?= ploy
 
-.PHONY: all dbg clean
+.PHONY: all dbg clean dirs
 
 all: $(TARGET)
 
@@ -29,23 +31,20 @@ dbg:
 	$(eval export CFLAGS)
 	$(MAKE)
 
-$(TARGET): $(LIBRARY_OBJECT) $(OBJECTS)
-	$(CXX) $(LFLAGS) $(CFLAGS) -o $@ $(LIBRARY_OBJECT) $(OBJECTS)
-
-$(LIBRARY_OBJECT): $(LIBRARY_SOURCE) $(OBJDIR)
-	$(CXX) $(CFLAGS) -o $@ -c $<
-
-$(LIBRARY_SOURCE): $(LIBRARY) $(BUILDDIR)
-	./rc.sh $(LIBRARY) $(BUILDDIR)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(OBJDIR)
-	$(CXX) $(CFLAGS) -o $@ -c $<
-
-$(OBJDIR):
-	mkdir -p $(OBJDIRS)
-
-$(BUILDDIR):
-	mkdir -p $(BUILDDIR)
-
 clean:
 	rm -rf $(OBJDIR) $(BUILDDIR) $(TARGET)
+
+dirs:
+	@mkdir -p $(OBJDIRS) $(BUILDDIR)
+
+$(TARGET): dirs $(LIBRARY_OBJECT) $(OBJECTS)
+	$(CXX) $(LFLAGS) $(CFLAGS) -o $@ $(LIBRARY_OBJECT) $(OBJECTS)
+
+$(LIBRARY_OBJECT): $(LIBRARY_SOURCE)
+	$(CXX) $(CFLAGS) -o $@ -c $<
+
+$(LIBRARY_SOURCE): $(LIBRARY)
+	./rc.sh $(LIBRARY) $(BUILDDIR)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	$(CXX) $(CFLAGS) -o $@ -c $<

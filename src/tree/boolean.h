@@ -10,14 +10,17 @@ namespace ploy
 
 class Tree::Boolean: public Value
 {
+private:
+  static const Boolean singletonFalse;
+  static const Boolean singletonTrue;
+
 public:
   const bool value;
 
   Boolean(bool value_) : value(value_) { ; }
-  Boolean(std::string lexeme) : value(lexeme == "#t")
-  {
-    assert(lexeme == "#t" || lexeme == "#f");
-  }
+
+  static const Boolean* fromValue(bool value);
+  static const Boolean* fromLexeme(std::string lexeme);
 
   virtual std::string inspect(void) const;
 };

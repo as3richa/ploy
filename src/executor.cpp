@@ -14,7 +14,7 @@ namespace ploy
 
 void execute(std::istream& stream)
 {
-  auto env = standardLibraryEnvironment();
+  auto env = standardLibrary();
   for(auto expression : parse(stream))
   {
     std::cout << expression->reduce(env);

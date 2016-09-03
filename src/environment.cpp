@@ -12,7 +12,7 @@ void Environment::mutate(std::string key, const Tree *value)
 {
   assert(!value->reducibile());
 
-  this->rest = new Environment(this->key, this->value, this->rest);
+  this->rest = GC::gnew<Environment>(this->key, this->value, this->rest);
   this->key = key;
   this->value = value;
 }

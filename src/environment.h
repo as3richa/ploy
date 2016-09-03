@@ -4,13 +4,13 @@
 #include <cassert>
 #include <string>
 
-#include "garbage_collected.h"
+#include "gc.h"
 #include "tree.h"
 
 namespace ploy
 {
 
-class Environment: public GarbageCollected
+class Environment: public GC
 {
 private:
   std::string key;

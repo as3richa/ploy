@@ -23,10 +23,7 @@ const Tree* eqCallback(std::vector<const Tree*>);
 const Tree* consCallback(std::vector<const Tree*>);
 const Tree* firstCallback(std::vector<const Tree*>);
 const Tree* restCallback(std::vector<const Tree*>);
-const Tree* emptyCallback(std::vector<const Tree*>);
 const Tree* listCallback(std::vector<const Tree*>);
-
-const Tree* empty = new Tree::Singleton("empty");
 
 struct
 {
@@ -44,38 +41,46 @@ struct
   {"cons", consCallback, 2, 2},
   {"first", firstCallback, 1, 1},
   {"rest", restCallback, 1, 1},
-  {"empty?", emptyCallback, 1, 1},
   {"list", listCallback, 0, Tree::BuiltinFunction::InfiniteArity}
 };
-const int n_builtin_functions = sizeof(builtin_functions) / sizeof(builtin_functions[0]);
 
-Environment* standardLibraryEnvironment(void)
+Environment* libraryEnvironment = nullptr;
+const Tree* empty;
+const Tree* sTrue;
+const Tree* sFalse;
+
+Environment* standardLibrary(void)
 {
-  static std::istringstream library_stream(library);
-  static std::vector<const Tree*> scheme_library = parse(library_stream);
-
-  auto env = new Environment();
-  for(int i = 0; i < n_builtin_functions; i ++)
+  if(libraryEnvironment == nullptr)
   {
-    env = new Environment(
-      builtin_functions[i].name,
-      new Tree::BuiltinFunction(
-        builtin_functions[i].name,
-        builtin_functions[i].callback,
-        builtin_functions[i].min_arity,
-        builtin_functions[i].max_arity
-      ),
-      env
-    );
-  }
-  env = new Environment("empty", empty, env);
+    static std::istringstream library_stream(library);
+    static std::vector<const Tree*> scheme_library = parse(library_stream);
 
-  for(auto expression : scheme_library)
-  {
-    expression->reduce(env);
+    libraryEnvironment = new Environment();
+    for(auto bf : builtin_functions)
+    {
+      libraryEnvironment = new Environment(
+        bf.name,
+        new Tree::BuiltinFunction(
+          bf.name,
+          bf.callback,
+          bf.min_arity,
+          bf.max_arity
+        ),
+        libraryEnvironment
+      );
+    }
+
+    empty = new Tree::Singleton("empty");
+    libraryEnvironment = new Environment("empty", empty, libraryEnvironment);
+
+    for(auto expression : scheme_library)
+    {
+      expression->reduce(libraryEnvironment);
+    }
   }
 
-  return env;
+  return libraryEnvironment;
 }
 
 const Tree* notCallback(std::vector<const Tree*> params)
@@ -83,7 +88,7 @@ const Tree* notCallback(std::vector<const Tree*> params)
   assert(params.size() == 1);
 
   auto casted = dynamic_cast<const Tree::Boolean*>(params[0]);
-  return new Tree::Boolean(casted && casted->value == false);
+  return Tree::Boolean::fromValue(casted && casted->value == false);
 }
 
 const Tree* mulCallback(std::vector<const Tree*> params)
@@ -162,13 +167,13 @@ const Tree* zeroCallback(std::vector<const Tree*> params)
 {
   assert(params.size() == 1);
   auto number = dynamic_cast<const Tree::Number*>(params[0]);
-  return new Tree::Boolean(number && number->value == 0);
+  return Tree::Boolean::fromValue(number && number->value == 0);
 }
 
 const Tree* eqCallback(std::vector<const Tree*> params)
 {
   assert(params.size() == 2);
-  return new Tree::Boolean(params[0]->eq(params[1]));
+  return Tree::Boolean::fromValue(params[0]->eq(params[1]));
 }
 
 const Tree* consCallback(std::vector<const Tree*> params)
@@ -197,12 +202,6 @@ const Tree* restCallback(std::vector<const Tree*> params)
     throw "TODO";
   }
   return casted->rest;
-}
-
-const Tree* emptyCallback(std::vector<const Tree*> params)
-{
-  assert(params.size() == 1);
-  return new Tree::Boolean(params[0] == empty);
 }
 
 const Tree* listCallback(std::vector<const Tree*> params)

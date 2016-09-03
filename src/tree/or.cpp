@@ -21,7 +21,7 @@ const Tree* Tree::Or::reduce(Environment* env) const
 {
   if(params.size() == 0)
   {
-    return new Tree::Boolean(false);
+    return Tree::Boolean::fromValue(false);
   }
   else
   {

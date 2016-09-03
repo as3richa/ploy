@@ -66,7 +66,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return new Tree::Let(bindings, body);
+        return GC::gnew<Tree::Let>(bindings, body);
       }
       case Token::LAMBDA:
       {
@@ -89,7 +89,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return new Tree::Lambda(identifiers, body);
+        return GC::gnew<Tree::Lambda>(identifiers, body);
       }
       case Token::DEFINE:
       {
@@ -98,7 +98,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return new Tree::Definition(identifier.lexeme, body);
+        return GC::gnew<Tree::Definition>(identifier.lexeme, body);
       }
       case Token::IF:
       {
@@ -108,7 +108,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return new Tree::If(conditional, true_branch, false_branch);
+        return GC::gnew<Tree::If>(conditional, true_branch, false_branch);
       }
       case Token::COND:
       {
@@ -141,7 +141,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return new Tree::Cond(branches, else_branch);
+        return GC::gnew<Tree::Cond>(branches, else_branch);
       }
       case Token::ELSE:
         throw ParseError(token, "expression");
@@ -173,21 +173,21 @@ const Tree* parse(Scanner& scanner)
         switch(function_or_operation.type)
         {
         case Token::AND:
-          return new Tree::And(params);
+          return GC::gnew<Tree::And>(params);
         case Token::OR:
-          return new Tree::Or(params);
+          return GC::gnew<Tree::Or>(params);
         default:
-          return new Tree::Application(fn, params);
+          return GC::gnew<Tree::Application>(fn, params);
         }
       }
     }
   }
   case Token::NUMBER:
-    return new Tree::Number(token.lexeme);
+    return GC::gnew<Tree::Number>(token.lexeme);
   case Token::IDENTIFIER:
-    return new Tree::Identifier(token.lexeme);
+    return GC::gnew<Tree::Identifier>(token.lexeme);
   case Token::BOOLEAN:
-    return new Tree::Boolean(token.lexeme);
+    return Tree::Boolean::fromLexeme(token.lexeme);
   default:
     throw ParseError(token, "expression");
   }

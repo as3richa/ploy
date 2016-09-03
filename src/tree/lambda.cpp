@@ -22,7 +22,7 @@ std::string Tree::Lambda::inspect(void) const
 
 const Tree* Tree::Lambda::reduce(Environment* env) const
 {
-  return new Tree::Closure(this->identifiers, this->body, env);
+  return GC::gnew<Tree::Closure>(this->identifiers, this->body, env);
 }
 
 }
