@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-#include "tree.h"
+#include "ast/tree.h"
 
 namespace ploy
 {

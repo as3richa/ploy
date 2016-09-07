@@ -46,12 +46,12 @@ int main(int argc, const char** argv)
   }
   catch(const ploy::Error& e)
   {
-    std::cout << source << ":" << e.what() << '\n';
+    std::cerr << source << ":" << e.what() << '\n';
     return 1;
   }
-  catch(const std::system_error& e)
+  catch(const std::exception& e)
   {
-    std::cout << source << ": " << strerror(errno) << '\n';
+    std::cerr << source << ": " << strerror(errno) << '\n';
     return 1;
   }
 

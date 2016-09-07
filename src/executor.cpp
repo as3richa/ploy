@@ -6,7 +6,7 @@
 
 #include "environment.h"
 #include "parser.h"
-#include "tree.h"
+#include "ast/tree.h"
 #include "standard_library.h"
 
 namespace ploy

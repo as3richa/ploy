@@ -4,7 +4,7 @@
 #include <istream>
 #include <memory>
 
-#include "tree.h"
+#include "ast/tree.h"
 
 namespace ploy
 {

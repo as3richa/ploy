@@ -5,7 +5,7 @@
 #include <string>
 
 #include "gc.h"
-#include "tree.h"
+#include "ast/tree.h"
 
 namespace ploy
 {

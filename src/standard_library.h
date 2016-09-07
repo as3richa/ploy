@@ -2,7 +2,7 @@
 #define _STANDARD_LIBRARY_H_
 
 #include "environment.h"
-#include "tree.h"
+#include "ast/tree.h"
 
 namespace ploy
 {

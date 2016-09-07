@@ -70,16 +70,7 @@ Token Scanner::scan(void)
     throw TokenError(token, "delimiting whitespace between non-parenthetical tokens");
   }
 
-  this->spaced = false;
-  while(!this->eof())
-  {
-    Token::Type next = transition(Token::NIL, this->stream.peek());
-    if(next != Token::WHITESPACE && next != Token::COMMENT)
-      break;
-
-    this->spaced = true;
-    this->scanAny();
-  }
+  this->skipSpacesAndComments();
 
   return (this->previous = token);
 }
@@ -122,6 +113,20 @@ Token Scanner::scanAny(void)
     throw TokenError(token);
 
   return token;
+}
+
+void Scanner::skipSpacesAndComments(void)
+{
+  this->spaced = false;
+  while(!this->eof())
+  {
+    Token::Type next = transition(Token::NIL, this->stream.peek());
+    if(next != Token::WHITESPACE && next != Token::COMMENT)
+      break;
+
+    this->spaced = true;
+    this->scanAny();
+  }
 }
 
 Token::Type transition(Token::Type state, int c)

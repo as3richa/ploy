@@ -9,7 +9,7 @@
 
 #include "exceptions.h"
 #include "tokenizer.h"
-#include "tree.h"
+#include "ast/tree.h"
 
 namespace ploy
 {

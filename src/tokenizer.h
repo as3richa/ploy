@@ -63,11 +63,12 @@ private:
   bool spaced;
 
   Token scanAny(void);
+  void skipSpacesAndComments(void);
 
 public:
   TrackedStream stream;
 
-  Scanner(std::istream& input) : previous(-1, -1), unscanned(false), spaced(true), stream(input) { ; }
+  Scanner(std::istream& input) : previous(-1, -1), unscanned(false), stream(input) { skipSpacesAndComments(); spaced = true; }
 
   Token scan(void);
   void unscan(void);

@@ -2,9 +2,9 @@
 
 #include <sstream>
 
-#include "tree.h"
-#include "tree/builtin_function.h"
-#include "tree/singleton.h"
+#include "ast/tree.h"
+#include "ast/builtin_function.h"
+#include "ast/singleton.h"
 
 #include "parser.h"
 #include "library.h"
@@ -18,6 +18,7 @@ const Tree* notCallback(std::vector<const Tree*>);
 const Tree* addCallback(std::vector<const Tree*>);
 const Tree* subCallback(std::vector<const Tree*>);
 const Tree* mulCallback(std::vector<const Tree*>);
+const Tree* divCallback(std::vector<const Tree*>);
 const Tree* zeroCallback(std::vector<const Tree*>);
 const Tree* eqCallback(std::vector<const Tree*>);
 const Tree* consCallback(std::vector<const Tree*>);
@@ -36,6 +37,7 @@ struct
   {"+", addCallback, 0, Tree::BuiltinFunction::InfiniteArity},
   {"-", subCallback, 1, Tree::BuiltinFunction::InfiniteArity},
   {"*", mulCallback, 0, Tree::BuiltinFunction::InfiniteArity},
+  {"/", divCallback, 1, Tree::BuiltinFunction::InfiniteArity},
   {"zero?", zeroCallback, 1, 1},
   {"eq?", eqCallback, 2, Tree::BuiltinFunction::InfiniteArity},
   {"cons", consCallback, 2, 2},
@@ -134,9 +136,17 @@ const Tree* addCallback(std::vector<const Tree*> params)
 const Tree* subCallback(std::vector<const Tree*> params)
 {
   assert(params.size() >= 1);
-  if(params.size() < 2)
+  if(params.size() == 1)
   {
-    throw "TODO";
+    auto first = dynamic_cast<const Tree::Number*>(params[0]);
+    if(!first)
+    {
+      throw "TODO";
+    }
+    else
+    {
+      return new Tree::Number(-first->value);
+    }
   }
   else
   {
@@ -156,6 +166,46 @@ const Tree* subCallback(std::vector<const Tree*> params)
           throw "TODO";
         }
         result -= number->value;
+      }
+
+      return new Tree::Number(result);
+    }
+  }
+}
+
+const Tree* divCallback(std::vector<const Tree*> params)
+{
+  assert(params.size() >= 1);
+  if(params.size() == 1)
+  {
+    auto first = dynamic_cast<const Tree::Number*>(params[0]);
+    if(!first)
+    {
+      throw "TODO";
+    }
+    else
+    {
+      return new Tree::Number(1/first->value);
+    }
+  }
+  else
+  {
+    auto first = dynamic_cast<const Tree::Number*>(params[0]);
+    if(!first)
+    {
+      throw "TODO";
+    }
+    else
+    {
+      mpq_class result = first->value;
+      for(int i = 1; i < (int)params.size(); i ++)
+      {
+        auto number = dynamic_cast<const Tree::Number*>(params[i]);
+        if(!number)
+        {
+          throw "TODO";
+        }
+        result /= number->value;
       }
 
       return new Tree::Number(result);
