@@ -1,4 +1,4 @@
-set -euo pipefail
+set -eu
 
 FILENAME="$1"
 BUILDDIR="$2"
