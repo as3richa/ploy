@@ -6,4 +6,5 @@ dependencies:
 
 test:
   override:
+    - make dbg
     - script/test

@@ -48,7 +48,7 @@
        (real-output (cdr exec-result))]
     (if (string=? real-output goal-output)
         (printf "     Output matches expectation. OK\n")
-        (error "Output does not match expectation"))))
+        (error "     Output does not match expectation"))))
 
 (printf "Found ~a tests\n" (length tests))
 (for-each run-test tests)
