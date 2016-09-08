@@ -1,6 +1,6 @@
 dependencies:
   pre:
-    - sudo add-apt-repository --yes --force-yes ppa:plt/racket
+    - sudo add-apt-repository --yes ppa:plt/racket
     - sudo apt-get update
     - sudo apt-get --yes --force-yes install racket
 
