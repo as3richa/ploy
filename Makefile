@@ -1,6 +1,6 @@
 MAKEFLAGS += -r
 
-CXX := clang
+CXX := clang-3.8
 
 SRCDIR := src
 OBJDIR := obj

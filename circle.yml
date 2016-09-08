@@ -2,7 +2,7 @@ dependencies:
   pre:
     - sudo add-apt-repository --yes ppa:plt/racket
     - sudo apt-get update
-    - sudo apt-get --yes --force-yes install racket clang
+    - sudo apt-get --yes --force-yes install racket clang-3.8
 
 test:
   override:
