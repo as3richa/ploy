@@ -1,23 +1,23 @@
 #lang racket
 
-(require racket/path)	
+(require racket/path)
 
 (define args
   (command-line
    #:program "test-runner"
-   #:args (executable test-directory)
-   (cons executable test-directory)))
+   #:args (executable tests-directory)
+   (cons executable tests-directory)))
 
 (define executable (car args))
-(define test-directory (cdr args))
+(define tests-directory (cdr args))
 
 (define test-timeout 5)
 
-(define tests (find-files
-               (lambda (path)
-                 (let [(extension (filename-extension path))]
-                   (and (bytes? extension) (equal? (bytes->string/utf-8 extension) "in"))))
-               test-directory))
+(define tests (if (equal? (filename-extension tests-directory) #"in")
+                  (list tests-directory)
+                  (find-files
+                   (lambda (path) (equal? (filename-extension path) #"in"))
+                   tests-directory)))
 
 (define (cat path [default ""])
   (if (file-exists? path)
@@ -37,7 +37,7 @@
           (close-output-port stdin)
           (close-input-port stderr)
           (cons status output)))))
-      
+
 
 (define (run-test input-path)
   (printf "===> Test ~a\n" input-path)
