@@ -1,20 +1,14 @@
 #include "cond.h"
+#include "boolean.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Cond::inspect(void) const
-{
-  throw "TODO";
-}
-
-const Tree* Tree::Cond::reduce(Environment* env) const
+const Value* Cond::reduce(Environment* env) const
 {
   for(auto branch : this->branches)
   {
-    auto conditional = dynamic_cast<const Tree::Boolean*>(branch.first->reduce(env));
+    auto conditional = dynamic_cast<const Boolean*>(branch.first->reduce(env));
     if(!conditional || conditional->value)
     {
       return branch.second->reduce(env);
@@ -24,4 +18,4 @@ const Tree* Tree::Cond::reduce(Environment* env) const
   return this->else_branch->reduce(env);
 }
 
-}
+}}

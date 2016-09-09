@@ -1,26 +1,24 @@
-#ifndef _IF_H_
-#define _IF_H_
+#ifndef _AST_IF_H_
+#define _AST_IF_H_
 
-#include "tree.h"
+#include "node.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::If: public Tree
+class If: public Node
 {
 private:
-  const Tree* conditional;
-  const Tree* true_branch;
-  const Tree* false_branch;
+  const Node* conditional;
+  const Node* true_branch;
+  const Node* false_branch;
 
 public:
-  If(const Tree* conditional_, const Tree* true_branch_, const Tree* false_branch_) :
+  If(const Node* conditional_, const Node* true_branch_, const Node* false_branch_) :
     conditional(conditional_), true_branch(true_branch_), false_branch(false_branch_) { ; }
-
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

@@ -1,14 +1,13 @@
 #ifndef _NUMBER_H_
 #define _NUMBER_H_
 
-#include "tree.h"
-
 #include <gmpxx.h>
+#include "value.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Number: public Value
+class Number: public Value
 {
 private:
   static mpq_class parse(std::string lexeme);
@@ -18,9 +17,9 @@ public:
   Number(std::string lexeme) : value(parse(lexeme)) { ; };
   Number(mpq_class value_) : value(value_) { ; };
   virtual std::string inspect(void) const;
-  virtual bool eq(const Tree* other) const;
+  virtual bool eq(const Value* other) const;
 };
 
-}
+}}
 
 #endif

@@ -1,14 +1,9 @@
+#include <gmpxx.h>
 #include "number.h"
 
-#include <gmpxx.h>
-#include <string>
+namespace ploy { namespace AST {
 
-#include "../exceptions.h"
-
-namespace ploy
-{
-
-mpq_class Tree::Number::parse(std::string lexeme)
+mpq_class Number::parse(std::string lexeme)
 {
   size_t point_position = lexeme.find('.');
   size_t e_position = lexeme.find_first_of("eE");
@@ -35,14 +30,14 @@ mpq_class Tree::Number::parse(std::string lexeme)
   {
     exponent = abs(exponent);
     if(!exponent.fits_uint_p())
-      throw RangeError("numeric literal is too large");
+      throw "TODO";
 
     mpz_ui_pow_ui(denominator.get_mpz_t(), 10, exponent.get_ui());
   }
   else
   {
     if(!exponent.fits_uint_p())
-      throw RangeError("numeric literal is too large");
+      throw "TODO";
 
     denominator = 1;
     mpz_class multiplier;
@@ -56,7 +51,7 @@ mpq_class Tree::Number::parse(std::string lexeme)
   return result;
 }
 
-std::string Tree::Number::inspect(void) const
+std::string Number::inspect(void) const
 {
   if(this->value == 0)
   {
@@ -72,10 +67,10 @@ std::string Tree::Number::inspect(void) const
     std::string("(/ ") + num.get_str() + " " + den.get_str() + ")";
 }
 
-bool Tree::Number::eq(const Tree* other) const
+bool Number::eq(const Value* other) const
 {
-  auto casted = dynamic_cast<const Tree::Number*>(other);
+  auto casted = dynamic_cast<const Number*>(other);
   return (casted && casted->value == this->value);
 }
 
-}
+}}

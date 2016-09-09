@@ -1,25 +1,22 @@
-#ifndef _OR_H_
-#define _OR_H_
+#ifndef _AST_OR_H_
+#define _AST_OR_H_
 
 #include <vector>
-#include <string>
+#include "node.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Or: public Tree
+class Or: public Node
 {
 private:
-  std::vector<const Tree*> params;
+  std::vector<const Node*> params;
 
 public:
-  Or(std::vector<const Tree*> params_) : params(params_) { ; }
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  Or(std::vector<const Node*> params_) : params(params_) { ; }
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

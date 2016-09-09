@@ -1,36 +1,19 @@
-#include "application.h"
-
-#include <string>
-
 #include <cassert>
+#include "application.h"
+#include "callable.h"
 
-namespace ploy
-{
+namespace ploy { namespace AST {
 
-std::string Tree::Application::inspect(void) const
+const Value* Application::reduce(Environment* env) const
 {
-  std::string result = "(";
-  result += this->fn->inspect();
-  for(auto& param : this->params)
-  {
-    result += ' ';
-    result += param->inspect();
-  }
-  result += ')';
-  return result;
-}
-
-const Tree* Tree::Application::reduce(Environment* env) const
-{
-  auto fn = dynamic_cast<const Tree::Callable*>(this->fn->reduce(env));
+  auto fn = dynamic_cast<const Callable*>(this->fn->reduce(env));
   if(!fn)
   {
-    assert(!"TODO");
     throw "TODO (not Callable)";
   }
   else
   {
-    std::vector<const Tree*> reduced_params;
+    std::vector<const Value*> reduced_params;
     for(auto& param : this->params)
     {
       reduced_params.push_back(param->reduce(env));
@@ -39,4 +22,4 @@ const Tree* Tree::Application::reduce(Environment* env) const
   }
 }
 
-}
+}}

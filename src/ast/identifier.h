@@ -1,22 +1,21 @@
-#ifndef _IDENTIFIER_H_
-#define _IDENTIFIER_H_
+#ifndef _AST_IDENTIFIER_H_
+#define _AST_IDENTIFIER_H_
 
-#include "tree.h"
+#include "node.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Identifier: public Tree
+class Identifier: public Node
 {
 private:
   std::string lexeme;
 
 public:
   Identifier(std::string lexeme_) : lexeme(lexeme_) { ; }
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

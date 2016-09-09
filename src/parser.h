@@ -3,13 +3,12 @@
 
 #include <istream>
 #include <memory>
-
-#include "ast/tree.h"
+#include "ast/ast.h"
 
 namespace ploy
 {
 
-std::vector<const Tree*> parse(std::istream& input);
+std::vector<const AST::Node*> parse(std::istream& input);
 
 }
 

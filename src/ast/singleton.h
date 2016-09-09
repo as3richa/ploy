@@ -1,14 +1,12 @@
 #ifndef _SINGLETON_H_
 #define _SINGLETON_H_
 
-#include "tree.h"
+#include "value.h"
 
-#include <string>
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Singleton: public Tree::Value
+class Singleton: public Value
 {
 private:
   std::string identifier;
@@ -18,6 +16,6 @@ public:
   virtual std::string inspect(void) const;
 };
 
-}
+}}
 
 #endif

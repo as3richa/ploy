@@ -1,26 +1,23 @@
-#ifndef _LAMBDA_H_
-#define _LAMBDA_H_
+#ifndef _AST_LAMBDA_H_
+#define _AST_LAMBDA_H_
 
 #include <vector>
-#include <string>
+#include "node.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Lambda: public Tree
+class Lambda: public Node
 {
 private:
   std::vector<std::string> identifiers;
-  const Tree* body;
+  const Node* body;
 
 public:
-  Lambda(std::vector<std::string> identifiers_, const Tree* body_) : identifiers(identifiers_), body(body_) { ; }
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  Lambda(std::vector<std::string> identifiers_, const Node* body_) : identifiers(identifiers_), body(body_) { ; }
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

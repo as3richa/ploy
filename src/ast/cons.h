@@ -1,26 +1,21 @@
-#ifndef _CONS_H_
-#define _CONS_H_
+#ifndef _AST_CONS_H_
+#define _AST_CONS_H_
 
-#include <string>
-#include <memory>
+#include "value.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Cons: public Tree
+class Cons: public Value
 {
 public:
-  const Tree* const first;
-  const Tree* const rest;
+  const Value* const first;
+  const Value* const rest;
 
-  Cons(const Tree* first_, const Tree* rest_) : first(first_), rest(rest_) { ; }
+  Cons(const Value* first_, const Value* rest_) : first(first_), rest(rest_) { ; }
   virtual std::string inspect(void) const;
-  virtual bool reducibile(void) const;
-  virtual const Tree* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

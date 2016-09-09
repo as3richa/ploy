@@ -1,23 +1,22 @@
-#ifndef _DEFINITION_H_
-#define _DEFINITION_H_
+#ifndef _AST_DEFINITION_H_
+#define _AST_DEFINITION_H_
 
-#include "tree.h"
+#include "node.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Definition: public Tree
+class Definition: public Node
 {
 private:
   std::string identifier;
-  const Tree* body;
+  const Node* body;
 
 public:
-  Definition(std::string identifier_, const Tree* body_) : identifier(identifier_), body(body_) { ; }
-  virtual const Tree* reduce(Environment*) const;
-  virtual std::string inspect(void) const;
+  Definition(std::string identifier_, const Node* body_) : identifier(identifier_), body(body_) { ; }
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

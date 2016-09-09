@@ -1,28 +1,25 @@
 #ifndef _LET_H_
 #define _LET_H_
 
-#include "tree.h"
-
 #include <vector>
 #include <algorithm>
+#include "node.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Let: public Tree
+class Let: public Node
 {
 private:
-  std::vector<std::pair<std::string, const Tree*>> bindings;
-  const Tree* body;
+  std::vector<std::pair<std::string, const Node*>> bindings;
+  const Node* body;
 
 public:
-  Let(std::vector<std::pair<std::string, const Tree*>> bindings_, const Tree* body_) :
+  Let(std::vector<std::pair<std::string, const Node*>> bindings_, const Node* body_) :
     bindings(bindings_), body(body_) { ; }
-
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

@@ -1,12 +1,8 @@
-#include "executor.h"
-
 #include <iostream>
 #include <istream>
 #include <memory>
-
-#include "environment.h"
+#include "executor.h"
 #include "parser.h"
-#include "ast/tree.h"
 #include "standard_library.h"
 
 namespace ploy

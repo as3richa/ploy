@@ -1,13 +1,11 @@
 #include "singleton.h"
 
-#include <string>
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Singleton::inspect(void) const
+std::string Singleton::inspect(void) const
 {
   return this->identifier;
 }
 
-}
+}}

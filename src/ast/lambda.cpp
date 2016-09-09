@@ -1,28 +1,13 @@
 #include "lambda.h"
+#include "closure.h"
+#include "../gc.h"
 
-#include <vector>
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Lambda::inspect(void) const
+const Value* Lambda::reduce(Environment* env) const
 {
-  std::string result = "(lambda (";
-  for(auto& id : this->identifiers)
-  {
-    result += id;
-    result += ' ';
-  }
-  result[result.size() - 1] = ')';
-  result += ' ';
-  result += this->body->inspect();
-  result += ')';
-  return result;
+  return GC::gnew<Closure>(this->identifiers, this->body, env);
 }
 
-const Tree* Tree::Lambda::reduce(Environment* env) const
-{
-  return GC::gnew<Tree::Closure>(this->identifiers, this->body, env);
-}
-
-}
+}}

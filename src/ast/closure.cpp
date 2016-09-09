@@ -1,31 +1,17 @@
 #include "closure.h"
 
-#include "../environment.h"
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Closure::inspect(void) const
+std::string Closure::inspect(void) const
 {
-  std::string result = "(lambda (";
-  for(auto& id : this->identifiers)
-  {
-    result += id;
-    result += ' ';
-  }
-  result[result.size() - 1] = ')';
-  result += ' ';
-  result += this->body->inspect();
-  result += ')';
-  return result;
+  return "#<lambda>";
 }
 
-const Tree* Tree::Closure::apply(std::vector<const Tree*> params) const
+const Value* Closure::apply(std::vector<const Value*> params) const
 {
   if(params.size() != this->identifiers.size())
   {
-    assert(!"TODO");
     throw "TODO";
   }
   else
@@ -42,4 +28,4 @@ const Tree* Tree::Closure::apply(std::vector<const Tree*> params) const
   }
 }
 
-}
+}}

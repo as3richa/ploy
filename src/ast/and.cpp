@@ -1,39 +1,24 @@
 #include "and.h"
+#include "boolean.h"
 
-#include <string>
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::And::inspect(void) const
-{
-  std::string result = "(and";
-  for(auto& param : this->params)
-  {
-    result += ' ';
-    result += param->inspect();
-  }
-  result += ')';
-  return result;
-}
-
-const Tree* Tree::And::reduce(Environment* env) const
+const Value* And::reduce(Environment* env) const
 {
   if(params.size() == 0)
   {
-    return Tree::Boolean::fromValue(true);
+    return Boolean::fromBool(true);
   }
   else
   {
     auto length = (int)params.size();
     for(int i = 0; i < length - 1; i ++)
     {
-      auto param = params[i]->reduce(env);
-      auto casted = dynamic_cast<const Tree::Boolean*>(param);
-
+      auto casted = dynamic_cast<const Boolean*>(params[i]->reduce(env));
       if(casted && casted->value == false)
       {
-        return Tree::Boolean::fromValue(false);
+        return Boolean::fromBool(false);
       }
     }
 
@@ -41,4 +26,4 @@ const Tree* Tree::And::reduce(Environment* env) const
   }
 }
 
-}
+}}

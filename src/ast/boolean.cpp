@@ -1,26 +1,26 @@
+#include <cassert>
 #include "boolean.h"
-#include "../exceptions.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-const Tree::Boolean Tree::Boolean::singletonFalse(false);
-const Tree::Boolean Tree::Boolean::singletonTrue(true);
+const Boolean Boolean::singletonFalse(false);
+const Boolean Boolean::singletonTrue(true);
 
-std::string Tree::Boolean::inspect(void) const
+std::string Boolean::inspect(void) const
 {
   return (this->value) ? "#t" : "#f";
 }
 
-const Tree::Boolean* Tree::Boolean::fromValue(bool value)
+const Boolean* Boolean::fromBool(bool value)
 {
-  return (value) ? &Tree::Boolean::singletonTrue : &Tree::Boolean::singletonFalse;
+  return (value) ? &Boolean::singletonTrue : &Boolean::singletonFalse;
 }
 
-const Tree::Boolean* Tree::Boolean::fromLexeme(std::string lexeme)
+const Boolean* Boolean::fromLexeme(std::string lexeme)
 {
-  assert(lexeme == "#t" || lexeme == "#f");
-  return Tree::Boolean::fromValue(lexeme == "#t");
+  assert("Boolean literal must be either \"#t\" or \"#f\"" && (lexeme == "#t" || lexeme == "#f"));
+  return Boolean::fromBool(lexeme == "#t");
 }
 
-}
+}}

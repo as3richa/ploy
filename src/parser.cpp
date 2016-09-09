@@ -1,26 +1,22 @@
-#include "parser.h"
-
 #include <cassert>
 #include <istream>
 #include <vector>
 #include <memory>
-
-#include <iostream>
-
+#include "parser.h"
 #include "exceptions.h"
 #include "tokenizer.h"
-#include "ast/tree.h"
+#include "ast/ast.h"
 
 namespace ploy
 {
 
-const Tree* parse(Scanner& scanner);
+const AST::Node* parse(Scanner& scanner);
 Token scanWithExpectations(Scanner&, Token::Type, Token::Type other = Token::NIL, std::string message = "");
 
-std::vector<const Tree*> parse(std::istream& input)
+std::vector<const AST::Node*> parse(std::istream& input)
 {
   Scanner scanner(input);
-  std::vector<const Tree*> expressions;
+  std::vector<const AST::Node*> expressions;
 
   while(!scanner.eof())
   {
@@ -30,7 +26,7 @@ std::vector<const Tree*> parse(std::istream& input)
   return expressions;
 }
 
-const Tree* parse(Scanner& scanner)
+const AST::Node* parse(Scanner& scanner)
 {
   Token token = scanner.scan();
 
@@ -43,7 +39,7 @@ const Tree* parse(Scanner& scanner)
     {
       case Token::LET:
       {
-        std::vector<std::pair<std::string, const Tree*>> bindings;
+        std::vector<std::pair<std::string, const AST::Node*>> bindings;
 
         scanWithExpectations(scanner, Token::OPEN_PAREN, Token::NIL, "parenthesized list of identifier/value bindings");
 
@@ -56,17 +52,17 @@ const Tree* parse(Scanner& scanner)
 
           peek = scanWithExpectations(scanner, Token::IDENTIFIER);
 
-          const Tree* value = parse(scanner);
+          const AST::Node* value = parse(scanner);
           bindings.push_back(std::make_pair(peek.lexeme, value));
 
           scanWithExpectations(scanner, Token::CLOSE_PAREN);
         }
 
-        const Tree* body = parse(scanner);
+        const AST::Node* body = parse(scanner);
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return GC::gnew<Tree::Let>(bindings, body);
+        return GC::gnew<AST::Let>(bindings, body);
       }
       case Token::LAMBDA:
       {
@@ -85,35 +81,35 @@ const Tree* parse(Scanner& scanner)
           identifiers.push_back(peek.lexeme);
         }
 
-        const Tree* body = parse(scanner);
+        const AST::Node* body = parse(scanner);
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return GC::gnew<Tree::Lambda>(identifiers, body);
+        return GC::gnew<AST::Lambda>(identifiers, body);
       }
       case Token::DEFINE:
       {
         Token identifier = scanWithExpectations(scanner, Token::IDENTIFIER);
-        const Tree* body = parse(scanner);
+        const AST::Node* body = parse(scanner);
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return GC::gnew<Tree::Definition>(identifier.lexeme, body);
+        return GC::gnew<AST::Definition>(identifier.lexeme, body);
       }
       case Token::IF:
       {
-        const Tree* conditional = parse(scanner);
-        const Tree* true_branch = parse(scanner);
-        const Tree* false_branch = parse(scanner);
+        const AST::Node* conditional = parse(scanner);
+        const AST::Node* true_branch = parse(scanner);
+        const AST::Node* false_branch = parse(scanner);
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return GC::gnew<Tree::If>(conditional, true_branch, false_branch);
+        return GC::gnew<AST::If>(conditional, true_branch, false_branch);
       }
       case Token::COND:
       {
-        std::vector<std::pair<const Tree*, const Tree*>> branches;
-        const Tree* else_branch;
+        std::vector<std::pair<const AST::Node*, const AST::Node*>> branches;
+        const AST::Node* else_branch;
 
         for(;;)
         {
@@ -141,7 +137,7 @@ const Tree* parse(Scanner& scanner)
 
         scanWithExpectations(scanner, Token::CLOSE_PAREN);
 
-        return GC::gnew<Tree::Cond>(branches, else_branch);
+        return GC::gnew<AST::Cond>(branches, else_branch);
       }
       case Token::ELSE:
         throw ParseError(token, "expression");
@@ -149,7 +145,7 @@ const Tree* parse(Scanner& scanner)
         throw ParseError(token, "at least one expression between open and close parentheses/brackets");
       default:
       {
-        const Tree* fn;
+        const AST::Node* fn;
         if(
           function_or_operation.type != Token::AND &&
           function_or_operation.type != Token::OR
@@ -159,7 +155,7 @@ const Tree* parse(Scanner& scanner)
           fn = parse(scanner);
         }
 
-        std::vector<const Tree*> params;
+        std::vector<const AST::Node*> params;
         for(;;)
         {
           Token peek = scanner.scan();
@@ -173,21 +169,21 @@ const Tree* parse(Scanner& scanner)
         switch(function_or_operation.type)
         {
         case Token::AND:
-          return GC::gnew<Tree::And>(params);
+          return GC::gnew<AST::And>(params);
         case Token::OR:
-          return GC::gnew<Tree::Or>(params);
+          return GC::gnew<AST::Or>(params);
         default:
-          return GC::gnew<Tree::Application>(fn, params);
+          return GC::gnew<AST::Application>(fn, params);
         }
       }
     }
   }
   case Token::NUMBER:
-    return GC::gnew<Tree::Number>(token.lexeme);
+    return GC::gnew<AST::Number>(token.lexeme);
   case Token::IDENTIFIER:
-    return GC::gnew<Tree::Identifier>(token.lexeme);
+    return GC::gnew<AST::Identifier>(token.lexeme);
   case Token::BOOLEAN:
-    return Tree::Boolean::fromLexeme(token.lexeme);
+    return AST::Boolean::fromLexeme(token.lexeme);
   default:
     throw ParseError(token, "expression");
   }

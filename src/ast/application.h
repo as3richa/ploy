@@ -1,26 +1,23 @@
-#ifndef _APPLICATION_H_
-#define _APPLICATION_H_
+#ifndef _AST_APPLICATION_H_
+#define _AST_APPLICATION_H_
 
 #include <vector>
-#include <string>
+#include "node.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-class Tree::Application: public Tree
+class Application: public Node
 {
 private:
-  const Tree* fn;
-  std::vector<const Tree*> params;
+  const Node* fn;
+  std::vector<const Node*> params;
 
 public:
-  Application(const Tree* fn_, std::vector<const Tree*> params_) : fn(fn_), params(params_) { ; }
-  virtual std::string inspect(void) const;
-  virtual const Tree* reduce(Environment*) const;
+  Application(const Node* fn_, std::vector<const Node*> params_) : fn(fn_), params(params_) { ; }
+  virtual const Value* reduce(Environment*) const;
 };
 
-}
+}}
 
 #endif

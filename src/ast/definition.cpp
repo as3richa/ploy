@@ -1,19 +1,12 @@
 #include "definition.h"
 
-#include "../environment.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Definition::inspect(void) const
-{
-  return std::string("(define ") + this->identifier + " " + this->body->inspect() + ")";
-}
-
-const Tree* Tree::Definition::reduce(Environment* env) const
+const Value* Definition::reduce(Environment* env) const
 {
   env->mutate(this->identifier, this->body->reduce(env));
   return nullptr;
 }
 
-}
+}}

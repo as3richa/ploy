@@ -1,20 +1,10 @@
 #include "identifier.h"
-
-#include <string>
-
-#include "../environment.h"
-#include "tree.h"
 #include "../exceptions.h"
 
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::Identifier::inspect(void) const
-{
-  return this->lexeme;
-}
-
-const Tree* Tree::Identifier::reduce(Environment* env) const
+const Value* Identifier::reduce(Environment* env) const
 {
   auto value = env->find(this->lexeme);
   if(!value)
@@ -27,4 +17,4 @@ const Tree* Tree::Identifier::reduce(Environment* env) const
   }
 }
 
-}
+}}

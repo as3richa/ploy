@@ -1,21 +1,12 @@
 #include "if.h"
+#include "boolean.h"
 
-#include "tree.h"
-
-namespace ploy
+namespace ploy { namespace AST
 {
 
-std::string Tree::If::inspect(void) const
+const Value* If::reduce(Environment* env) const
 {
-  return std::string("(if ") +
-    this->conditional->inspect() + " " +
-    this->true_branch->inspect() + " " +
-    this->false_branch->inspect() + ")";
-}
-
-const Tree* Tree::If::reduce(Environment* env) const
-{
-  auto conditional = dynamic_cast<const Tree::Boolean*>(this->conditional->reduce(env));
+  auto conditional = dynamic_cast<const Boolean*>(this->conditional->reduce(env));
   if(conditional && conditional->value == false)
   {
     return this->false_branch->reduce(env);
@@ -26,4 +17,4 @@ const Tree* Tree::If::reduce(Environment* env) const
   }
 }
 
-}
+}}
