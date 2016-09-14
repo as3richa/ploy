@@ -13,10 +13,10 @@
 
 (define test-timeout 5)
 
-(define tests (if (equal? (filename-extension tests-directory) #"in")
+(define tests (if (equal? (filename-extension tests-directory) #"ply")
                   (list tests-directory)
                   (find-files
-                   (lambda (path) (equal? (filename-extension path) #"in"))
+                   (lambda (path) (equal? (filename-extension path) #"ply"))
                    tests-directory)))
 
 (define (cat path [default ""])
@@ -48,7 +48,9 @@
        (real-output (cdr exec-result))]
     (if (string=? real-output goal-output)
         (printf "     Output matches expectation. OK\n")
-        (error "     Output does not match expectation"))))
+        (begin
+          (printf "     Output does not match expectation. Re-run with ~a ~a\n" executable input-path)
+          (error "Test failed")))))
 
 (printf "Found ~a tests\n" (length tests))
 (for-each run-test tests)

@@ -1,0 +1,2 @@
+#!/bin/sh
+racket test/test-runner.rkt ./ploy test/tests/$1

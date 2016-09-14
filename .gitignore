@@ -2,3 +2,5 @@
 ploy
 obj/
 build/
+*compiled*
+*~

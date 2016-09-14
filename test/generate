@@ -1,0 +1,13 @@
+#!/bin/bash
+set -eux
+
+R=racket
+G=test/generators
+T=test/tests
+
+$R $G/math.rkt 10 3 3   1>$T/math/math.tiny.ply      2>$T/math/math.tiny.out
+$R $G/math.rkt 1000 5 5 1>$T/math/math.medium.ply    2>$T/math/math.medium.out
+$R $G/math.rkt 500 8 8 1>$T/math/math.huge.ply      2>$T/math/math.huge.out
+
+$R $G/cond_mux.rkt    1>$T/boolean/cond_mux.ply    2>$T/boolean/cond_mux.out
+$R $G/logical_mux.rkt 1>$T/boolean/logical_mux.ply 2>$T/boolean/logical_mux.out

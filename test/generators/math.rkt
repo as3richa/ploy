@@ -1,8 +1,12 @@
 #lang racket
 
-(define count 500)
-(define maximum-params 8)
-(define maximum-depth 8)
+(define args (command-line
+              #:args (count maximum-params maximum-depth)
+              (list count maximum-params maximum-depth)))
+
+(define count (string->number (first args)))
+(define maximum-params (string->number (second args)))
+(define maximum-depth (string->number (third args)))
 
 (define maximum-literal 4294967086)
 (define literal-probability 0.3)
@@ -45,8 +49,6 @@
       (number->string n)
       (string-append "(/ " (number->string (numerator n)) " " (number->string (denominator n)) ")")))
 
-(for-each
- (lambda (v)
-   (write (car v)) (newline)
-   (fprintf (current-error-port) "~a\n" (ploy-rational (cdr v))))
- (random-expr-list count maximum-depth))
+(for [(v (random-expr-list count maximum-depth))]
+      (write (car v)) (newline)
+      (fprintf (current-error-port) "~a\n" (ploy-rational (cdr v))))
